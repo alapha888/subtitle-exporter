@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Settings</title>
+<link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <h1 id="optTitle">Settings</h1>
+
+  <section>
+    <label class="field">
+      <span id="optLang"></span>
+      <select id="langSelect">
+        <option value="auto" id="optLangAuto"></option>
+        <option value="zh">中文</option>
+        <option value="en">English</option>
+      </select>
+    </label>
+
+    <label class="field">
+      <span id="optDefaultFormat"></span>
+      <select id="formatSelect">
+        <option value="txt">TXT</option>
+        <option value="srt">SRT</option>
+        <option value="vtt">VTT</option>
+        <option value="ass">ASS</option>
+      </select>
+    </label>
+  </section>
+
+  <section>
+    <h2 id="optLicense"></h2>
+    <div id="proStatus" class="status-line"></div>
+    <div class="key-row">
+      <input type="text" id="keyInput" spellcheck="false" autocomplete="off">
+      <button id="activateBtn"></button>
+      <button id="deactivateBtn"></button>
+    </div>
+    <p id="optBuyText"></p>
+    <button id="buyBtn"></button>
+  </section>
+
+  <section>
+    <p id="optAbout" class="about"></p>
+  </section>
+
+  <script src="../lib/config.js"></script>
+  <script src="../lib/license.js"></script>
+  <script src="../lib/i18n.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

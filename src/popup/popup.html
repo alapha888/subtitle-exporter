@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <div class="app-name" id="appName">Bilingual Subtitle Exporter</div>
+    <div class="tagline" id="tagline"></div>
+    <div class="pro-row">
+      <span id="proBadge" class="badge"></span>
+      <a href="#" id="settingsLink"></a>
+    </div>
+  </header>
+
+  <main id="main" hidden>
+    <div class="video-title" id="videoTitle"></div>
+
+    <label class="field">
+      <span id="trackLabel"></span>
+      <select id="trackSelect"></select>
+    </label>
+
+    <label class="field">
+      <span id="formatLabel"></span>
+      <select id="formatSelect">
+        <option value="txt">TXT</option>
+        <option value="srt">SRT 🔒</option>
+        <option value="vtt">VTT 🔒</option>
+        <option value="ass">ASS 🔒</option>
+      </select>
+    </label>
+
+    <label class="check">
+      <input type="checkbox" id="bilingualCheck">
+      <span id="bilingualLabel"></span> 🔒
+    </label>
+
+    <label class="field" id="secondField" hidden>
+      <span id="bilingualTrackLabel"></span>
+      <select id="secondSelect"></select>
+    </label>
+
+    <button id="exportBtn" class="primary"></button>
+    <button id="batchBtn"></button>
+
+    <div class="buy-row">
+      <button id="buyBtn"></button>
+      <button id="activateBtn"></button>
+    </div>
+  </main>
+
+  <div id="status" class="status"></div>
+
+  <script src="../lib/config.js"></script>
+  <script src="../lib/converter.js"></script>
+  <script src="../lib/license.js"></script>
+  <script src="../lib/i18n.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

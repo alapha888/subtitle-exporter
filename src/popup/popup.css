@@ -1,0 +1,18 @@
+body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; width: 340px; margin: 0; padding: 12px 14px; color: #1c1b1a; background: #fff; }
+header .app-name { font-size: 15px; font-weight: 700; }
+header .tagline { font-size: 12px; color: #5b5a59; margin-top: 2px; }
+.pro-row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+.badge { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #e8e6e3; color: #444; }
+.badge.pro { background: #ffe9a8; color: #6b4e00; }
+.pro-row a { font-size: 12px; color: #0060df; text-decoration: none; }
+.video-title { font-size: 12px; color: #333; margin: 10px 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.field { display: block; margin: 8px 0; font-size: 12px; }
+.field span { display: block; margin-bottom: 4px; color: #5b5a59; }
+.field select { width: 100%; padding: 5px; font-size: 13px; }
+.check { display: flex; align-items: center; gap: 6px; font-size: 13px; margin: 8px 0; }
+button { width: 100%; padding: 7px; margin-top: 8px; font-size: 13px; border: 1px solid #c9c6c3; border-radius: 6px; background: #f4f2f0; cursor: pointer; }
+button.primary { background: #0060df; border-color: #0060df; color: #fff; font-weight: 600; }
+button:disabled { opacity: 0.55; cursor: default; }
+.buy-row { display: flex; gap: 8px; }
+.buy-row button { flex: 1; }
+.status { margin-top: 10px; font-size: 12px; color: #5b5a59; min-height: 16px; word-break: break-word; }

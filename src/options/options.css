@@ -1,0 +1,14 @@
+body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; max-width: 640px; margin: 24px auto; padding: 0 16px; color: #1c1b1a; }
+h1 { font-size: 20px; }
+h2 { font-size: 15px; margin-bottom: 6px; }
+section { border-top: 1px solid #e0dedb; padding: 14px 0; }
+.field { display: block; margin: 10px 0; font-size: 13px; }
+.field span { display: block; margin-bottom: 4px; color: #5b5a59; }
+.field select { min-width: 220px; padding: 5px; font-size: 13px; }
+.key-row { display: flex; gap: 8px; align-items: center; }
+.key-row input { flex: 1; padding: 7px; font-size: 14px; letter-spacing: 0.5px; }
+button { padding: 7px 14px; font-size: 13px; border: 1px solid #c9c6c3; border-radius: 6px; background: #f4f2f0; cursor: pointer; }
+button:disabled { opacity: 0.55; cursor: default; }
+.status-line { font-size: 13px; color: #5b5a59; margin: 6px 0; }
+.status-line.ok { color: #137333; }
+.about { font-size: 12px; color: #5b5a59; line-height: 1.6; }
