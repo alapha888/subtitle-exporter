@@ -39,18 +39,34 @@
     return String(t == null ? '' : t).replace(/\u200b/g, '').replace(/[ \t]+/g, ' ').trim();
   }
 
+  function validTime(v) {
+    var n = Number(v);
+    return (isFinite(n) && n > 0) ? n : 0;
+  }
+
+  /** End <= start (missing/invalid timing) falls back to next cue start, else start+2. */
+  function fixCueEnds(cues) {
+    for (var k = 0; k < cues.length; k++) {
+      if (!(cues[k].end > cues[k].start)) {
+        cues[k].end = (k + 1 < cues.length) ? cues[k + 1].start : cues[k].start + 2;
+      }
+    }
+    return cues;
+  }
+
   /** Bilibili subtitle JSON ({body:[{from,to,content}]}) -> cues */
   function parseBilibiliJson(json) {
     var body = (json && json.body) || [];
     var cues = [];
     for (var i = 0; i < body.length; i++) {
       var it = body[i];
+      if (!it) continue;
       var text = cleanText(it.content);
       if (!text) continue;
-      cues.push({ start: Number(it.from) || 0, end: Number(it.to) || 0, text: text });
+      cues.push({ start: validTime(it.from), end: validTime(it.to), text: text });
     }
     cues.sort(function (a, b) { return a.start - b.start; });
-    return cues;
+    return fixCueEnds(cues);
   }
 
   /** YouTube timedtext json3 ({events:[{tStartMs,dDurationMs,segs:[{utf8}]}]}) -> cues */
@@ -59,32 +75,36 @@
     var cues = [];
     for (var i = 0; i < events.length; i++) {
       var ev = events[i];
-      if (!ev.segs) continue; // window-style / metadata events have no segs
+      if (!ev || !ev.segs) continue; // window-style / metadata events have no segs
       var text = '';
-      for (var j = 0; j < ev.segs.length; j++) text += (ev.segs[j].utf8 || '');
+      for (var j = 0; j < ev.segs.length; j++) text += ((ev.segs[j] && ev.segs[j].utf8) || '');
       text = text.replace(/\n/g, ' ');
       text = cleanText(text);
       if (!text) continue;
-      var start = (ev.tStartMs || 0) / 1000;
-      var end = start + (ev.dDurationMs || 0) / 1000;
+      var start = validTime(ev.tStartMs) / 1000;
+      var end = start + validTime(ev.dDurationMs) / 1000;
       cues.push({ start: start, end: end, text: text });
     }
     cues.sort(function (a, b) { return a.start - b.start; });
-    // End times of 0 (missing duration) fall back to next cue start.
-    for (var k = 0; k < cues.length; k++) {
-      if (cues[k].end <= cues[k].start) {
-        cues[k].end = (k + 1 < cues.length) ? cues[k + 1].start : cues[k].start + 2;
-      }
-    }
-    return cues;
+    return fixCueEnds(cues);
   }
 
   /** Remove consecutive duplicate lines (YouTube ASR rolling captions repeat text). */
   function dedupeConsecutive(cues) {
     var out = [];
     for (var i = 0; i < cues.length; i++) {
-      if (out.length && out[out.length - 1].text === cues[i].text) {
-        out[out.length - 1].end = cues[i].end; // extend previous cue instead
+      var prev = out.length ? out[out.length - 1] : null;
+      if (prev && prev.text === cues[i].text) {
+        prev.end = Math.max(prev.end, cues[i].end); // extend previous cue, never shorten it
+        continue;
+      }
+      // ASR rolling captions build up prefix-wise: "hello" -> "hello world".
+      // The longer cue supersedes the shorter one it extends.
+      if (prev && cues[i].text.length > prev.text.length &&
+          cues[i].text.indexOf(prev.text) === 0 &&
+          cues[i].text.charAt(prev.text.length) === ' ') {
+        prev.text = cues[i].text;
+        prev.end = Math.max(prev.end, cues[i].end);
         continue;
       }
       out.push({ start: cues[i].start, end: cues[i].end, text: cues[i].text });
@@ -155,9 +175,10 @@
     for (var i = 0; i < primary.length; i++) {
       var p = primary[i];
       var parts = [];
+      var EPS = 0.001; // tolerate float error so merely-adjacent cues do not count as overlapping
       for (var j = 0; j < secondary.length; j++) {
         var s = secondary[j];
-        if (s.start < p.end && s.end > p.start) {
+        if (s.start < p.end - EPS && s.end > p.start + EPS) {
           if (parts.indexOf(s.text) === -1) parts.push(s.text);
         }
       }
